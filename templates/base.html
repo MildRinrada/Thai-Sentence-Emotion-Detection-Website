@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>เว็บตรวจจับความรู้สึกของประโยคภาษาไทย</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header class="header">
+        <h1 class="header__title">เว็บตรวจจับความรู้สึกของประโยคภาษาไทย</h1>
+        <p class="header__subtitle">Website for detecting the sentiment of Thai sentences</p>
+    </header>
+
+    <main class="content">
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

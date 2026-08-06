@@ -1,0 +1,13 @@
+<form class="input-form" action="{{ url_for('analyze') }}" method="post">
+    <label class="input-form__label" for="input">กรุณาป้อนข้อความหรือประโยค</label>
+    <input class="input-form__field"
+           type="text"
+           name="input"
+           id="input"
+           value="{{ text }}"
+           placeholder="เช่น วันนี้อากาศดีจัง"
+           autocomplete="off"
+           autofocus
+           required>
+    <button class="input-form__button" type="submit">วิเคราะห์ความรู้สึก</button>
+</form>

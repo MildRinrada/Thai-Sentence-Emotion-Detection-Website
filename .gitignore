@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+.env
+
+# โมเดลที่เทรนแล้ว สร้างใหม่ได้ด้วย python train_model.py
+models/

@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(pip install -r requirements.txt)",
+      "PowerShell(python app.py)",
+      "PowerShell(Start-Sleep -Seconds 4; $home_resp = Invoke-WebRequest -UseBasicParsing http://127.0.0.1:5000/; \"HOME STATUS: $\\($home_resp.StatusCode\\)\"; $post = Invoke-WebRequest -UseBasicParsing -Method Post -Uri http://127.0.0.1:5000/analyze -Body @{input='รักเธอที่สุดในโลกเลย'} -MaximumRedirection 5; \"POST STATUS: $\\($post.StatusCode\\)\"; \"FINAL URL: $\\($post.BaseResponse.ResponseUri\\)\"; if \\($post.Content -match 'love.png'\\) { \"RESULT IMAGE: love.png shown\" } else { \"RESULT IMAGE: not found\" })",
+      "PowerShell(git rm -q --cached database.py 2>$null)",
+      "PowerShell(\"---\")",
+      "PowerShell($t = Measure-Command { python train_model.py }; \"TRAIN TIME: $\\([math]::Round\\($t.TotalSeconds,1\\)\\)s\"; Get-ChildItem models | Select-Object Name, @{n='KB';e={[math]::Round\\($_.Length/1KB,1\\)}})",
+      "PowerShell($env:PYTHONIOENCODING='utf-8'; python \"C:\\\\Users\\\\mild-\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Portfolio-Project-Website-for-detecting-the-sentiment-of-Thai-sentences\\\\cc25d112-cddd-483d-a297-93aec43901bd\\\\scratchpad\\\\bench.py\")",
+      "PowerShell($env:PORT = \"5059\"; python app.py)"
+    ]
+  }
+}

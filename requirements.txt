@@ -1,0 +1,7 @@
+Flask
+python-dotenv
+pandas
+openpyxl
+scikit-learn
+joblib
+attacut

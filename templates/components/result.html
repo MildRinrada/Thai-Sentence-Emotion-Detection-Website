@@ -1,0 +1,7 @@
+{% if emoji %}
+<section class="result" aria-live="polite">
+    {% if text %}<p class="result__text">“{{ text }}”</p>{% endif %}
+    <div class="result__emoji" role="img" aria-label="{{ result }}">{{ emoji }}</div>
+    <p class="result__label">{{ result }}</p>
+</section>
+{% endif %}
