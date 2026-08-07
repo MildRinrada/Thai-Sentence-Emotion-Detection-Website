@@ -13,6 +13,12 @@
 
 ---
 
+## Screenshots
+
+![Example UI](doc/images/example_ui.png)
+
+---
+
 ## โครงสร้างโปรเจกต์
 
 ```
