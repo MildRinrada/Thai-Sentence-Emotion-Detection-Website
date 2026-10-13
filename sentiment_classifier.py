@@ -3,12 +3,14 @@
 โมเดลถูกเทรนครั้งเดียวแล้วเซฟเป็นไฟล์ .joblib เวลาใช้งานจริงจะโหลดไฟล์นั้นมาใช้เลย
 ไม่ต้องอ่าน Excel และตัดคำทั้งชุดข้อมูลใหม่ทุกครั้ง
 """
+import re
+
 import joblib
 import pandas as pd
 from attacut import tokenize
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.naive_bayes import MultinomialNB
-from sklearn.pipeline import Pipeline
+from sklearn.pipeline import FeatureUnion, Pipeline
 
 from config import DATA_FILE, MODEL_FILE
 
@@ -24,13 +26,26 @@ LABEL_NAMES = {label: name for label, (name, _) in EMOTIONS.items()}
 EMOJI_BY_NAME = {name: emoji for name, emoji in EMOTIONS.values()}
 
 
+def normalize(text: str) -> str:
+    """ตัวอักษรไทยที่พิมพ์ซ้ำ 3 ตัวขึ้นไปให้เหลือตัวเดียว เช่น "มากกกก" -> "มาก" """
+    return re.sub(r"([฀-๿])\1{2,}", r"\1", text.lower())
+
+
 def train_and_save():
     """เทรนโมเดลจากไฟล์ Excel แล้วเซฟลง MODEL_FILE คืนค่า pipeline ที่เทรนแล้ว"""
     df = pd.read_excel(DATA_FILE)
 
+    # ใช้ทั้งคำที่ตัดด้วย attacut และชิ้นตัวอักษร 2-4 ตัว (char n-gram)
+    # ส่วน char n-gram ช่วยให้ยังจับความหมายได้แม้คำนั้นตัดผิดหรือไม่เคยเจอในชุดข้อมูล
+    features = FeatureUnion([
+        ("word", TfidfVectorizer(tokenizer=tokenize, token_pattern=None,
+                                 preprocessor=normalize, sublinear_tf=True)),
+        ("char", TfidfVectorizer(analyzer="char", ngram_range=(2, 4),
+                                 preprocessor=normalize, sublinear_tf=True)),
+    ])
     pipeline = Pipeline([
-        ("tfidf", TfidfVectorizer(tokenizer=tokenize, token_pattern=None, use_idf=False)),
-        ("clf", MultinomialNB()),
+        ("features", features),
+        ("clf", MultinomialNB(alpha=0.1)),
     ])
     pipeline.fit(df["text"], df["label"])
 
