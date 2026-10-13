@@ -62,13 +62,17 @@ def load_model():
 
 
 class ThaiSentimentClassifier:
-    """หุ้มโมเดลไว้ให้เรียก predict() ได้ โดยโหลดโมเดลแบบ lazy ครั้งเดียว"""
+    """หุ้มโมเดลไว้ให้เรียก predict() ได้ โหลดโมเดลแบบ lazy และโหลดใหม่เมื่อไฟล์โมเดลเปลี่ยน"""
 
     def __init__(self):
         self._pipeline = None
+        self._model_mtime = None
 
     def predict(self, text: str) -> str:
         """คืนชื่ออารมณ์ภาษาไทยของประโยคที่รับเข้ามา"""
-        if self._pipeline is None:
+        # ถ้ารัน python train_model.py ขณะเว็บเปิดอยู่ จะได้ใช้โมเดลใหม่ทันทีโดยไม่ต้องรีสตาร์ทเว็บ
+        mtime = MODEL_FILE.stat().st_mtime if MODEL_FILE.exists() else None
+        if self._pipeline is None or mtime != self._model_mtime:
             self._pipeline = load_model()
+            self._model_mtime = MODEL_FILE.stat().st_mtime
         return LABEL_NAMES[self._pipeline.predict([text])[0]]
